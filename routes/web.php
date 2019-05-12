@@ -5,49 +5,57 @@
 | Web Routes
 |--------------------------------------------------------------------------
 |
-| This file is where you may define all of the routes that are handled
-| by your application. Just tell Laravel the URIs it should respond
-| to using a Closure or controller method. Build something great!
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
 |
 */
 
-Route::get('/', [
-    'uses' => 'PostController@getIndex',
-    'as' => 'blog.index'
-]);
+Route::get('/','PagesController@index');
 
-Route::get('post/{id}', [
-    'uses' => 'PostController@getPost',
-    'as' => 'blog.post'
-]);
+Route::get('/about ','PagesController@about');
+Route::get('/services','PagesController@services');
 
-Route::get('about', function () {
-    return view('other.about');
-})->name('other.about');
+// Route::resource('posts','PostsController');
 
-Route::group(['prefix' => 'admin'], function() {
+Route::group(['prefix' => 'posts'], function() {
     Route::get('', [
-        'uses' => 'PostController@getAdminIndex',
-        'as' => 'admin.index'
+        'uses' => 'PostsController@index',
+        'as' => 'posts.index'
     ]);
 
     Route::get('create', [
-        'uses' => 'PostController@getAdminCreate',
-        'as' => 'admin.create'
+        'uses' => 'PostsController@create',
+        'as' => 'posts.create'
     ]);
 
-    Route::post('create', [
-        'uses' => 'PostController@postAdminCreate',
-        'as' => 'admin.create'
+    Route::post('store', [
+        'uses' => 'PostsController@store',
+        'as' => 'posts.store'
     ]);
 
-    Route::get('edit/{id}', [
-        'uses' => 'PostController@getAdminEdit',
-        'as' => 'admin.edit'
+    Route::get('/{id}', [
+        'uses' => 'PostsController@edit',
+        'as' => 'posts.edit'
+    ]);
+     Route::get('show/{id}', [
+        'uses' => 'PostsController@show',
+        'as' => 'posts.show'
     ]);
 
-    Route::post('edit', [
-        'uses' => 'PostController@postAdminUpdate',
-        'as' => 'admin.update'
+	Route::get('edit/{id}', [
+        'uses' => 'PostsController@edit',
+        'as' => 'posts.edit'
+    ]);
+    Route::post('update/{id}', [
+        'uses' => 'PostsController@update',
+        'as' => 'posts.update'
+    ]);
+     Route::get('destroy/{id}', [
+        'uses' => 'PostsController@destroy',
+        'as' => 'posts.destroy'
     ]);
 });
+Auth::routes();
+
+Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
